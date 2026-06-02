@@ -1,0 +1,121 @@
+.dashboard-wrapper {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.split-container {
+  display: flex;
+  width: 100%;
+  min-height: 70vh;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+.team-section {
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Sfondi richiesti */
+.donne-section {
+  background-color: #ffe4e1; /* Rosa soft */
+  border-right: 2px solid #ffb6c1;
+}
+
+.uomini-section {
+  background-color: #e0f7fa; /* Azzurro soft */
+}
+
+.team-title {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+  color: #333;
+}
+
+.vittorie-box {
+  background: rgba(255, 255, 255, 0.7);
+  padding: 15px 30px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.vittorie-box .label {
+  display: block;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.vittorie-box .counter {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #111;
+}
+
+.storico-lista {
+  width: 100%;
+  max-width: 400px;
+}
+
+.storico-lista h3 {
+  text-align: center;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.match-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+
+/* Evidenziazione per chi ha vinto la specifica partita */
+.winner-card {
+  border: 3px solid #28a745;
+  background-color: #f8fff9;
+}
+
+.card-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.footer-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.btn-primary-action {
+  background-color: #007bff;
+  color: white;
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,123,255,0.3);
+  font-weight: bold;
+}
+
+.btn-primary-action:hover {
+  background-color: #0056b3;
+}
+
+button { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+.btn-edit { background-color: #ffc107; color: black; }
+.btn-delete { background-color: #dc3545; color: white; }

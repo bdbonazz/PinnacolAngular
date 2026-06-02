@@ -1,0 +1,85 @@
+<div class="detail-container">
+  <h2>Dettaglio Partita</h2>
+  
+  <div class="form-group-row">
+    <label>Data (dd/MM/yyyy): 
+      <input type="text" [(ngModel)]="partita.data" placeholder="gg/mm/aaaa">
+    </label>
+    <label>Prima Mano a: 
+      <select [(ngModel)]="partita.giocatorePrimaMano">
+        @for (g of giocatori; track g) {
+          <option [value]="g">{{g}}</option>
+        }
+      </select>
+    </label>
+  </div>
+
+  <hr>
+
+  <h3>Elenco Mani</h3>
+  <button class="btn-add" (click)="aggiungiMano()">+ Aggiungi Mano</button>
+
+  @if (manoInModifica) {
+    <div class="mano-form">
+      <h4>{{ isNuovaMano ? 'Nuova Mano' : 'Modifica Mano' }}</h4>
+      <div class="form-row">
+        <label>Punti Donne: <input type="number" [(ngModel)]="manoInModifica.punteggioDonne"></label>
+        <label>Punti Uomini: <input type="number" [(ngModel)]="manoInModifica.punteggioUomini"></label>
+        <label>Chi ha chiuso: 
+          <select [(ngModel)]="manoInModifica.giocatoreChiusura">
+            @for (g of giocatori; track g) {
+              <option [value]="g">{{g}}</option>
+            }
+          </select>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="manoInModifica.chiusuraDiMano"> Chiusura di mano
+        </label>
+      </div>
+      <div class="form-actions">
+        <button class="btn-save" (click)="salvaMano()">Conferma Mano</button>
+        <button class="btn-cancel" (click)="annullaMano()">Annulla</button>
+      </div>
+    </div>
+  }
+
+  <table class="mani-table">
+    <thead>
+      <tr>
+        <th>Punti Donne</th>
+        <th>Punti Uomini</th>
+        <th>Chiusura</th>
+        <th>Chiusura di Mano</th>
+        <th>Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (m of partita.mani; track m.id) {
+        <tr>
+          <td>{{ m.punteggioDonne }}</td>
+          <td>{{ m.punteggioUomini }}</td>
+          <td>{{ m.giocatoreChiusura }}</td>
+          <td>{{ m.chiusuraDiMano ? 'Sì' : 'No' }}</td>
+          <td>
+            <button class="btn-edit" (click)="modificaMano(m)">Modifica</button>
+            <button class="btn-delete" (click)="eliminaMano(m.id)">Elimina</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5" style="text-align: center;">Nessuna mano registrata per questa partita.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <div class="totali-parziali">
+    <p><strong>Totale Attuale - Donne:</strong> {{ partita.punteggioTotaleDonne }} | <strong>Uomini:</strong> {{ partita.punteggioTotaleUomini }}</p>
+    <p><strong>Stato:</strong> {{ partita.squadraVincente === 'Pareggio' ? 'Pareggio' : 'Vince ' + partita.squadraVincente }}</p>
+  </div>
+
+  <div class="main-actions">
+    <button class="btn-save-all" (click)="salvaTutto()">Salva Partita</button>
+    <button class="btn-cancel-all" (click)="annulla.emit()">Torna allo Storico</button>
+  </div>
+</div>
