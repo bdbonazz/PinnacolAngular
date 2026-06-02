@@ -6,19 +6,33 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1100; /* Più alto della dialog iniziale */
+  z-index: 1200; /* Più alto di qualsiasi altro elemento */
+  padding: 15px;
+  box-sizing: border-box;
 }
 
 .dialog-card {
   background: white;
   padding: 25px;
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  width: 90%;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  width: 100%;
   max-width: 400px;
+  box-sizing: border-box;
+  animation: scaleIn 0.2s ease-out;
 }
 
-h4 { margin: 0 0 20px 0; font-size: 1.4rem; color: #333; text-align: center; }
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.dialog-card h4 {
+  margin: 0 0 20px 0;
+  font-size: 1.35rem;
+  color: #333;
+  text-align: center;
+}
 
 .form-grid {
   display: flex;
@@ -34,12 +48,23 @@ h4 { margin: 0 0 20px 0; font-size: 1.4rem; color: #333; text-align: center; }
   color: #444;
 }
 
-.form-grid input[type="number"], .form-grid select {
+.form-grid input[type="number"], 
+.form-grid select {
   padding: 10px;
-  margin-top: 5px;
+  margin-top: 6px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.form-grid input[type="number"]:focus, 
+.form-grid select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
 }
 
 .checkbox-label {
@@ -47,20 +72,66 @@ h4 { margin: 0 0 20px 0; font-size: 1.4rem; color: #333; text-align: center; }
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  padding: 5px 0;
+  padding: 8px 0;
+  user-select: none;
 }
 
-.checkbox-label input { width: 18px; height: 18px; }
+.checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  cursor: pointer;
+}
 
 .dialog-actions {
   margin-top: 25px;
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 12px;
 }
 
-button { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+.dialog-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.95rem;
+  flex: 1; /* Dividono lo spazio a metà sui telefoni */
+  max-width: 120px;
+  transition: background-color 0.2s;
+}
+
 .btn-save { background-color: #28a745; color: white; }
 .btn-save:hover { background-color: #218838; }
+
 .btn-cancel { background-color: #6c757d; color: white; }
 .btn-cancel:hover { background-color: #5a6268; }
+
+/* ==========================================
+   MEDIA QUERIES (TELEFONI STRETTI)
+   ========================================== */
+@media (max-width: 480px) {
+  .dialog-card {
+    padding: 20px 15px;
+  }
+  
+  .dialog-card h4 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+  
+  .form-grid {
+    gap: 12px;
+  }
+  
+  .dialog-actions {
+    margin-top: 20px;
+    gap: 10px;
+  }
+  
+  .dialog-actions button {
+    max-width: none; /* Rimuove il limite e li estende equamente in larghezza */
+    padding: 12px;
+  }
+}
