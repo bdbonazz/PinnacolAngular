@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatchDetailComponent } from './match-detail.component';
 import { Partita } from '../models/types';
+import { DataService } from '../services/data.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-main-score',
@@ -16,6 +18,12 @@ export class MainScoreComponent {
   
   // Stato per la gestione della vista dettaglio
   partitaSelezionata: Partita | null = null;
+
+    constructor(private dataService: DataService) { }
+
+    ngOnInit(): void {
+        this.dataService.partite$.pipe(take(1)).subscribe(x => this.partite = x);
+    }
 
   // Getters per calcolare le partite vinte in totale da ogni squadra
   get vittorieDonne(): number {
@@ -46,6 +54,7 @@ export class MainScoreComponent {
   eliminaPartita(id: number) {
     if (confirm('Sei sicuro di voler eliminare definitivamente questa partita dallo storico?')) {
       this.partite = this.partite.filter(p => p.id !== id);
+      this.dataService.updateData(this.partite);
     }
   }
 
@@ -56,6 +65,7 @@ export class MainScoreComponent {
     } else {
       this.partite.push(partitaModificata);
     }
+      this.dataService.updateData(this.partite);
     this.partitaSelezionata = null;
   }
 

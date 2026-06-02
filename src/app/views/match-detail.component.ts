@@ -6,7 +6,7 @@ import { ManoDialogComponent } from './mano-dialog.component';
 @Component({
   selector: 'app-match-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, ManoDialogComponent], // <--- Registralo qui
+  imports: [CommonModule, FormsModule, ManoDialogComponent],
   templateUrl: './match-detail.component.html',
   styleUrls: ['./match-detail.component.css']
 })

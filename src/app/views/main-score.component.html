@@ -5,7 +5,6 @@
       <div class="team-header donne-header">
         <h1 class="team-title">DONNE</h1>
         <div class="vittorie-box">
-          <span class="label">Partite Vinte</span>
           <span class="counter">{{ vittorieDonne }}</span>
         </div>
       </div>
@@ -13,7 +12,6 @@
       <div class="team-header uomini-header">
         <h1 class="team-title">UOMINI</h1>
         <div class="vittorie-box">
-          <span class="label">Partite Vinte</span>
           <span class="counter">{{ vittorieUomini }}</span>
         </div>
       </div>
@@ -26,8 +24,8 @@
         <thead>
           <tr>
             <th class="col-donne">Data</th>
-            <th class="col-donne">Punti Donne</th>
-            <th class="col-uomini">Punti Uomini</th>
+            <th class="col-donne">Donne</th>
+            <th class="col-uomini">Uomini</th>
             <th class="col-uomini">Azioni</th>
           </tr>
         </thead>
@@ -36,7 +34,6 @@
             <tr>
               <td class="col-donne text-center">
                 <span class="date-text">{{ p.data }}</span>
-                <span class="first-hand">Mano a: {{ p.giocatorePrimaMano }}</span>
               </td>
               <td class="col-donne score-text" [class.winner-text]="p.squadraVincente === 'Donne'">
                 {{ p.punteggioTotaleDonne }}

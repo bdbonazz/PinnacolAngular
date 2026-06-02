@@ -23,19 +23,8 @@
 }
 
 <div class="detail-container" [class.blurred]="mostraDialogIniziale || manoInModifica">
-  <h2>{{ isEdit ? 'Modifica Partita' : 'Nuova Partita' }}</h2>
+  <h2>{{ isEdit ? 'Modifica Partita' : 'Nuova Partita' }} {{partita.data}}</h2>
   
-  <div class="form-group-row">
-    <label>Data: 
-      <input type="text" [(ngModel)]="partita.data" [disabled]="isEdit">
-    </label>
-    <label>Prima Mano a: 
-      <input type="text" [ngModel]="partita.giocatorePrimaMano" [disabled]="true">
-    </label>
-  </div>
-
-  <hr>
-
   <div class="table-header-flex">
     <h3>Elenco Mani</h3>
     <button class="btn-add" (click)="aggiungiMano()">+ Aggiungi Mano</button>
@@ -44,20 +33,24 @@
   <table class="mani-table">
     <thead>
       <tr>
+        <th>Chi ha fatto le carte</th>
         <th>Punti Donne</th>
         <th>Punti Uomini</th>
         <th>Chi ha chiuso</th>
-        <th>Chiusura di Mano</th>
         <th>Azioni</th>
       </tr>
     </thead>
     <tbody>
-      @for (m of partita.mani; track m.id) {
+      @for (m of partita.mani; track m.id; let i = $index) {
         <tr>
+          <td>
+            {{ i % 4 === 0 ? partita.giocatorePrimaMano : '' }}
+          </td>
           <td>{{ m.punteggioDonne }}</td>
           <td>{{ m.punteggioUomini }}</td>
-          <td>{{ m.giocatoreChiusura }}</td>
-          <td>{{ m.chiusuraDiMano ? 'Sì' : 'No' }}</td>
+          <td><span><b>{{ m.giocatoreChiusura }}</b></span>@if (m.chiusuraDiMano) {
+              <span class="mano-icon" title="Chiusura di mano">🖐️</span>
+            }</td>
           <td>
             <button class="btn-edit" (click)="modificaMano(m)">Modifica</button>
             <button class="btn-delete" (click)="eliminaMano(m.id)">Elimina</button>
@@ -68,13 +61,17 @@
           <td colspan="5" class="no-data">Nessuna mano registrata per questa partita.</td>
         </tr>
       }
+        <tr>
+          <td><span><b>Totale</b></span></td>
+          <td><span><b>{{ partita.punteggioTotaleDonne }}</b></span>
+                @if (partita.squadraVincente === 'Donne') { <span class="crown">👑</span> }</td>
+          <td><span><b>{{ partita.punteggioTotaleUomini }}</b></span>
+                @if (partita.squadraVincente === 'Uomini') { <span class="crown">👑</span> }</td>
+          <td></td>
+          <td></td>
+        </tr>
     </tbody>
   </table>
-
-  <div class="totali-parziali">
-    <p><strong>Punteggio Attuale — Donne:</strong> {{ partita.punteggioTotaleDonne }} | <strong>Uomini:</strong> {{ partita.punteggioTotaleUomini }}</p>
-    <p><strong>Stato:</strong> {{ partita.squadraVincente === 'Pareggio' ? 'Pareggio momentaneo' : 'In vantaggio: ' + partita.squadraVincente }}</p>
-  </div>
 
   <div class="main-actions">
     <button class="btn-save-all" (click)="salvaTutto()">Salva Tutto e Chiudi</button>
