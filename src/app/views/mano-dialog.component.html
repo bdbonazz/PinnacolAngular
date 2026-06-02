@@ -1,0 +1,32 @@
+<div class="dialog-overlay">
+  <div class="dialog-card">
+    <h4>{{ isNuovaMano ? 'Nuova Mano' : 'Modifica Mano' }}</h4>
+    
+    <div class="form-grid">
+      <label>Punti Donne: 
+        <input type="number" [(ngModel)]="manoLocale.punteggioDonne" min="0">
+      </label>
+      
+      <label>Punti Uomini: 
+        <input type="number" [(ngModel)]="manoLocale.punteggioUomini" min="0">
+      </label>
+      
+      <label>Chi ha chiuso: 
+        <select [(ngModel)]="manoLocale.giocatoreChiusura">
+          @for (g of giocatori; track g) {
+            <option [value]="g">{{g}}</option>
+          }
+        </select>
+      </label>
+      
+      <label class="checkbox-label">
+        <input type="checkbox" [(ngModel)]="manoLocale.chiusuraDiMano"> Chiusura di mano
+      </label>
+    </div>
+
+    <div class="dialog-actions">
+      <button class="btn-save" (click)="conferma()">Conferma</button>
+      <button class="btn-cancel" (click)="annulla.emit()">Annulla</button>
+    </div>
+  </div>
+</div>

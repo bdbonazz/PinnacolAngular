@@ -1,13 +1,13 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Giocatore, Mano, Partita } from '../models/types';
-
+import { Partita, Giocatore, Mano } from '../models/types';
+import { ManoDialogComponent } from './mano-dialog.component';
 @Component({
   selector: 'app-match-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './match-detail.component.ts.html',
+  imports: [CommonModule, FormsModule, ManoDialogComponent], // <--- Registralo qui
+  templateUrl: './match-detail.component.html',
   styleUrls: ['./match-detail.component.css']
 })
 export class MatchDetailComponent implements OnInit {
@@ -17,16 +17,25 @@ export class MatchDetailComponent implements OnInit {
 
   giocatori: Giocatore[] = ['Giancarlo', 'Luigi', 'Sabrina', 'Wanna'];
   
-  // Proprietà per la mano in editing/creazione
+  isEdit: boolean = false;
+  mostraDialogIniziale: boolean = false;
+
+  // Stato gestione Dialog Mano
   manoInModifica: Mano | null = null;
   isNuovaMano: boolean = false;
 
   ngOnInit() {
-    // Se è una nuova partita, impostiamo una data predefinita nel formato corretto
-    if (!this.partita.data) {
+    this.isEdit = this.partita.mani.length > 0 || this.partita.punteggioTotaleDonne > 0 || this.partita.punteggioTotaleUomini > 0;
+    if (!this.isEdit) {
       const oggi = new Date();
-      this.partita.data = oggi.toLocaleDateString('it-IT');
+      this.partita.data = `${String(oggi.getDate()).padStart(2, '0')}/${String(oggi.getMonth() + 1).padStart(2, '0')}/${oggi.getFullYear()}`;
+      this.mostraDialogIniziale = true;
     }
+  }
+
+  selezionaGiocatoreIniziale(g: Giocatore) {
+    this.partita.giocatorePrimaMano = g;
+    this.mostraDialogIniziale = false;
   }
 
   aggiungiMano() {
@@ -42,7 +51,7 @@ export class MatchDetailComponent implements OnInit {
 
   modificaMano(mano: Mano) {
     this.isNuovaMano = false;
-    this.manoInModifica = { ...mano };
+    this.manoInModifica = mano; // Passato alla dialog che ne farà una copia locale
   }
 
   eliminaMano(idMano: number) {
@@ -52,22 +61,16 @@ export class MatchDetailComponent implements OnInit {
     }
   }
 
-  salvaMano() {
-    if (!this.manoInModifica) return;
-
+  salvaManoDialog(manoRicevuta: Mano) {
     if (this.isNuovaMano) {
-      this.partita.mani.push(this.manoInModifica);
+      this.partita.mani.push(manoRicevuta);
     } else {
-      const index = this.partita.mani.findIndex(m => m.id === this.manoInModifica!.id);
+      const index = this.partita.mani.findIndex(m => m.id === manoRicevuta.id);
       if (index !== -1) {
-        this.partita.mani[index] = this.manoInModifica;
+        this.partita.mani[index] = manoRicevuta;
       }
     }
     this.riconteggiaPartita();
-    this.manoInModifica = null;
-  }
-
-  annullaMano() {
     this.manoInModifica = null;
   }
 

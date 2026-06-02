@@ -7,7 +7,7 @@ import { Partita } from '../models/types';
   selector: 'app-main-score',
   standalone: true,
   imports: [CommonModule, MatchDetailComponent],
-  templateUrl: './main-score.component.ts.html',
+  templateUrl: './main-score.component.html',
   styleUrls: ['./main-score.component.css']
 })
 export class MainScoreComponent {

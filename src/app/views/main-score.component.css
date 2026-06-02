@@ -5,95 +5,188 @@
   padding: 20px;
 }
 
-.split-container {
+/* Header diviso in due parti in alto */
+.split-top {
   display: flex;
   width: 100%;
-  min-height: 70vh;
-  border-radius: 12px;
+  border-radius: 12px 12px 0 0;
   overflow: hidden;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
-.team-section {
+.team-header {
   flex: 1;
-  padding: 30px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Sfondi richiesti */
-.donne-section {
-  background-color: #ffe4e1; /* Rosa soft */
-  border-right: 2px solid #ffb6c1;
+.donne-header {
+  background-color: #ffe4e1; /* Rosa intestazione */
 }
 
-.uomini-section {
-  background-color: #e0f7fa; /* Azzurro soft */
+.uomini-header {
+  background-color: #e0f7fa; /* Azzurro intestazione */
 }
 
 .team-title {
-  font-size: 3rem;
-  margin-bottom: 10px;
+  font-size: 2.5rem;
+  margin: 0 0 10px 0;
   letter-spacing: 2px;
   color: #333;
 }
 
 .vittorie-box {
   background: rgba(255, 255, 255, 0.7);
-  padding: 15px 30px;
-  border-radius: 10px;
+  padding: 10px 25px;
+  border-radius: 8px;
   text-align: center;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
 .vittorie-box .label {
   display: block;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  color: #666;
+  color: #555;
 }
 
 .vittorie-box .counter {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: bold;
   color: #111;
 }
 
-.storico-lista {
-  width: 100%;
-  max-width: 400px;
+/* Layout della Tabella Storico Centrata */
+.storico-container {
+  margin: 40px auto;
+  max-width: 900px; /* Centra la tabella dando una larghezza ottimale */
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.storico-lista h3 {
+.storico-container h2 {
   text-align: center;
-  color: #444;
+  color: #333;
   margin-bottom: 20px;
 }
 
-.match-card {
-  background: #ffffff;
-  border-radius: 8px;
+.storico-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+
+.storico-table th {
+  padding: 12px 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  border-bottom: 3px solid #ccc;
+}
+
+.storico-table td {
   padding: 15px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-  transition: transform 0.2s;
+  border-bottom: 1px solid #e0e0e0;
+  vertical-align: middle;
 }
 
-/* Evidenziazione per chi ha vinto la specifica partita */
-.winner-card {
-  border: 3px solid #28a745;
-  background-color: #f8fff9;
+/* Gestione dei colori delle colonne (Metà Rosa e Metà Azzurra) */
+.col-donne {
+  background-color: #fff0f0; /* Tonalità rosa molto chiara per leggibilità testo */
+  text-align: center;
 }
 
-.card-actions {
-  margin-top: 10px;
+th.col-donne {
+  background-color: #ffd1d1; /* Intestazione tabella donne leggermente più scura */
+}
+
+.col-uomini {
+  background-color: #f0faff; /* Tonalità azzurra molto chiara per leggibilità testo */
+  text-align: center;
+}
+
+th.col-uomini {
+  background-color: #cdeeff; /* Intestazione tabella uomini leggermente più scura */
+}
+
+/* Dettagli del testo dentro la tabella */
+.date-text {
+  display: block;
+  font-weight: bold;
+  color: #333;
+}
+
+.first-hand {
+  display: block;
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 3px;
+}
+
+.score-text {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.winner-text {
+  font-weight: bold;
+  color: #28a745; /* Colore verde per evidenziare il punteggio vincente */
+}
+
+.crown {
+  font-size: 1rem;
+  margin-left: 5px;
+}
+
+/* Stile dei bottoni Icona (Modifica ed Elimina) */
+.actions-cell {
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+  justify-content: center;
+  gap: 12px;
 }
 
+.btn-icon {
+  background: none;
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-icon:active {
+  transform: scale(0.95);
+}
+
+.btn-edit {
+  color: #ffc107; /* Giallo/Arancio per la matita */
+}
+.btn-edit:hover {
+  background-color: rgba(255, 193, 7, 0.15);
+}
+
+.btn-delete {
+  color: #dc3545; /* Rosso per il cestino */
+}
+.btn-delete:hover {
+  background-color: rgba(220, 53, 69, 0.15);
+}
+
+.no-records {
+  text-align: center;
+  padding: 30px !important;
+  color: #777;
+  font-style: italic;
+  background-color: #f9f9f9;
+}
+
+/* Bottone a fondo pagina */
 .footer-actions {
   display: flex;
   justify-content: center;
@@ -103,19 +196,16 @@
 .btn-primary-action {
   background-color: #007bff;
   color: white;
-  padding: 15px 40px;
-  font-size: 1.2rem;
+  padding: 14px 40px;
+  font-size: 1.1rem;
   border: none;
   border-radius: 30px;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,123,255,0.3);
+  box-shadow: 0 4px 10px rgba(0,123,255,0.25);
   font-weight: bold;
+  transition: background-color 0.2s;
 }
 
 .btn-primary-action:hover {
   background-color: #0056b3;
 }
-
-button { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-.btn-edit { background-color: #ffc107; color: black; }
-.btn-delete { background-color: #dc3545; color: white; }
