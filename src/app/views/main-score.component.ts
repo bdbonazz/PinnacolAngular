@@ -1,75 +1,76 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatchDetailComponent } from './match-detail.component';
-import { Partita } from '../models/types';
+import { Torneo } from '../models/types';
 import { DataService } from '../services/data.service';
-import { take } from 'rxjs';
+import { BehaviorSubject, map, Observable, take } from 'rxjs';
+import { TorneoDetailComponent } from './torneo-detail.component';
 
 @Component({
   selector: 'app-main-score',
   standalone: true,
-  imports: [CommonModule, MatchDetailComponent],
+  imports: [CommonModule, TorneoDetailComponent],
   templateUrl: './main-score.component.html',
   styleUrls: ['./main-score.component.css']
 })
-export class MainScoreComponent {
-  // Storico delle partite salvate
-  partite: Partita[] = [];
-  
+export class MainScoreComponent implements OnInit {
+  // Storico dei tornei salvati
+  tornei$: BehaviorSubject<Torneo[]> = new BehaviorSubject<Torneo[]>([]);
   // Stato per la gestione della vista dettaglio
-  partitaSelezionata: Partita | null = null;
+  torneoSelezionato$: BehaviorSubject<Torneo | null> = new BehaviorSubject<Torneo | null>(null);
+  vittorieD$: Observable<number>;
+  vittorieU$: Observable<number>;
 
-    constructor(private dataService: DataService) { }
+    constructor(private dataService: DataService) { 
+      this.vittorieD$ = this.tornei$.pipe(map(tornei => tornei.filter(torneo => torneo.vittoria === 'D').length));
+      this.vittorieU$ = this.tornei$.pipe(map(tornei => tornei.filter(torneo => torneo.vittoria === 'U').length));
+    }
 
     ngOnInit(): void {
-        this.dataService.partite$.pipe(take(1)).subscribe(x => this.partite = x);
+if(this.dataService.hasOldCache()) {
+this.dataService.caricaVecchiDati();
+}
+        this.dataService.tornei$.pipe(take(1)).subscribe(x => this.tornei$.next(x));
     }
 
-  // Getters per calcolare le partite vinte in totale da ogni squadra
-  get vittorieDonne(): number {
-    return this.partite.filter(p => p.squadraVincente === 'Donne').length;
-  }
 
-  get vittorieUomini(): number {
-    return this.partite.filter(p => p.squadraVincente === 'Uomini').length;
-  }
-
-  nuovaPartita() {
-    this.partitaSelezionata = {
+  nuovoTorneo() {
+    this.torneoSelezionato$.next({
       id: Date.now(),
-      giocatorePrimaMano: 'Giancarlo',
-      squadraVincente: 'Pareggio',
+      vittoria: 'X',
       data: '',
-      punteggioTotaleDonne: 0,
-      punteggioTotaleUomini: 0,
-      mani: []
-    };
+      vittorieD: 0,
+      vittorieU: 0,
+      partite: [],
+    });
   }
 
-  modificaPartita(partita: Partita) {
+  modificaTorneo(torneo: Torneo) {
     // Passiamo una copia profonda per evitare modifiche dirette prima del salvataggio
-    this.partitaSelezionata = JSON.parse(JSON.stringify(partita));
+    this.torneoSelezionato$.next(JSON.parse(JSON.stringify(torneo)));
   }
 
-  eliminaPartita(id: number) {
-    if (confirm('Sei sicuro di voler eliminare definitivamente questa partita dallo storico?')) {
-      this.partite = this.partite.filter(p => p.id !== id);
-      this.dataService.updateData(this.partite);
+  eliminaTorneo(id: number) {
+    if (confirm('Sei sicuro di voler eliminare definitivamente questo torneo dallo storico?')) {
+      const nuovoValoreTornei = this.tornei$.value.filter(p => p.id !== id);
+      this.tornei$.next(nuovoValoreTornei);
+      this.dataService.updateData(nuovoValoreTornei);
     }
   }
 
-  salvaPartitaDettaglio(partitaModificata: Partita) {
-    const index = this.partite.findIndex(p => p.id === partitaModificata.id);
+  salvaTorneoDettaglio(torneoModificato: Torneo) {
+      const nuovoValoreTornei = this.tornei$.value;
+    const index = nuovoValoreTornei.findIndex(p => p.id === torneoModificato.id);
     if (index !== -1) {
-      this.partite[index] = partitaModificata;
+      nuovoValoreTornei[index] = torneoModificato;
     } else {
-      this.partite.push(partitaModificata);
+      nuovoValoreTornei.push(torneoModificato);
     }
-      this.dataService.updateData(this.partite);
-    this.partitaSelezionata = null;
+      this.tornei$.next(nuovoValoreTornei);
+      this.dataService.updateData(nuovoValoreTornei);
+    this.torneoSelezionato$.next(null);
   }
 
   annullaDettaglio() {
-    this.partitaSelezionata = null;
+    this.torneoSelezionato$.next(null);
   }
 }

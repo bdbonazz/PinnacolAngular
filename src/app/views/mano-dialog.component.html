@@ -3,24 +3,33 @@
     <h4>{{ isNuovaMano ? 'Nuova Mano' : 'Modifica Mano' }}</h4>
     
     <div class="form-grid">
-      <label>Punti Donne: 
-        <input type="number" [(ngModel)]="manoLocale.punteggioDonne" min="0">
+      <label>Punti Giancarlo: 
+        <input type="number" [(ngModel)]="manoLocale.puntiG" min="0">
       </label>
-      
-      <label>Punti Uomini: 
-        <input type="number" [(ngModel)]="manoLocale.punteggioUomini" min="0">
+      <label>Punti Luigi: 
+        <input type="number" [(ngModel)]="manoLocale.puntiL" min="0">
+      </label>
+      <label>Punti Sabrina: 
+        <input type="number" [(ngModel)]="manoLocale.puntiS" min="0">
+      </label>
+      <label>Punti Wanna: 
+        <input type="number" [(ngModel)]="manoLocale.puntiW" min="0">
       </label>
       
       <label>Chi ha chiuso: 
-        <select [(ngModel)]="manoLocale.giocatoreChiusura">
+        <select [(ngModel)]="manoLocale.chiHaChiuso">
           @for (g of giocatori; track g) {
-            <option [value]="g">{{g}}</option>
+            <option [value]="g">{{nomeGiocatore(g)}}</option>
           }
         </select>
       </label>
       
       <label class="checkbox-label">
-        <input type="checkbox" [(ngModel)]="manoLocale.chiusuraDiMano"> Chiusura di mano
+        <input type="checkbox" [(ngModel)]="manoLocale.chiusoDiMano"> Chiusura di mano
+      </label>
+      
+      <label class="checkbox-label">
+        <input type="checkbox" [(ngModel)]="manoLocale.shit"> 💩
       </label>
     </div>
 

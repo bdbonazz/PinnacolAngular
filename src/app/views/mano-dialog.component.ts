@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Mano, Giocatore } from '../models/types';
+import { ottieniNomeGiocatore } from '../utils/utils';
 
 @Component({
   selector: 'app-mano-dialog',
@@ -28,4 +29,8 @@ export class ManoDialogComponent implements OnInit {
   conferma() {
     this.salva.emit(this.manoLocale);
   }
+  
+    nomeGiocatore(g: Giocatore): string {
+      return ottieniNomeGiocatore(g);
+    }
 }

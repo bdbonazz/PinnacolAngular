@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Partita, Giocatore, Mano } from '../models/types';
 import { ManoDialogComponent } from './mano-dialog.component';
+import { ottieniNomeGiocatore } from '../utils/utils';
 @Component({
   selector: 'app-match-detail',
   standalone: true,
@@ -15,7 +16,7 @@ export class MatchDetailComponent implements OnInit {
   @Output() salvaPartita = new EventEmitter<Partita>();
   @Output() annulla = new EventEmitter<void>();
 
-  giocatori: Giocatore[] = ['Giancarlo', 'Luigi', 'Sabrina', 'Wanna'];
+  giocatori: Giocatore[] = ['G', 'L', 'S', 'W'];
   
   isEdit: boolean = false;
   mostraDialogIniziale: boolean = false;
@@ -25,16 +26,14 @@ export class MatchDetailComponent implements OnInit {
   isNuovaMano: boolean = false;
 
   ngOnInit() {
-    this.isEdit = this.partita.mani.length > 0 || this.partita.punteggioTotaleDonne > 0 || this.partita.punteggioTotaleUomini > 0;
+    this.isEdit = this.partita.mani.length > 0 || this.partita.puntiD > 0 || this.partita.puntiU > 0;
     if (!this.isEdit) {
-      const oggi = new Date();
-      this.partita.data = `${String(oggi.getDate()).padStart(2, '0')}/${String(oggi.getMonth() + 1).padStart(2, '0')}/${oggi.getFullYear()}`;
       this.mostraDialogIniziale = true;
     }
   }
 
   selezionaGiocatoreIniziale(g: Giocatore) {
-    this.partita.giocatorePrimaMano = g;
+    this.partita.primaMano = g;
     this.mostraDialogIniziale = false;
   }
 
@@ -42,10 +41,13 @@ export class MatchDetailComponent implements OnInit {
     this.isNuovaMano = true;
     this.manoInModifica = {
       id: Date.now(),
-      punteggioDonne: 0,
-      punteggioUomini: 0,
-      giocatoreChiusura: 'Giancarlo',
-      chiusuraDiMano: false
+      puntiG: 0,
+      puntiL: 0,
+      puntiS: 0,
+      puntiW: 0,
+      chiHaChiuso: 'G',
+      chiusoDiMano: false,
+      shit: false,
     };
   }
 
@@ -75,19 +77,23 @@ export class MatchDetailComponent implements OnInit {
   }
 
   riconteggiaPartita() {
-    this.partita.punteggioTotaleDonne = this.partita.mani.reduce((sum, m) => sum + m.punteggioDonne, 0);
-    this.partita.punteggioTotaleUomini = this.partita.mani.reduce((sum, m) => sum + m.punteggioUomini, 0);
+    this.partita.puntiD = this.partita.mani.reduce((sum, m) => sum + m.puntiS + m.puntiW, 0);
+    this.partita.puntiU = this.partita.mani.reduce((sum, m) => sum + m.puntiG + m.puntiL, 0);
 
-    if (this.partita.punteggioTotaleDonne > this.partita.punteggioTotaleUomini) {
-      this.partita.squadraVincente = 'Donne';
-    } else if (this.partita.punteggioTotaleUomini > this.partita.punteggioTotaleDonne) {
-      this.partita.squadraVincente = 'Uomini';
+    if (this.partita.puntiD > this.partita.puntiU) {
+      this.partita.vittoria = 'D';
+    } else if (this.partita.puntiU > this.partita.puntiD) {
+      this.partita.vittoria = 'U';
     } else {
-      this.partita.squadraVincente = 'Pareggio';
+      this.partita.vittoria = 'X';
     }
   }
 
   salvaTutto() {
     this.salvaPartita.emit(this.partita);
+  }
+
+  nomeGiocatore(g: Giocatore): string {
+    return ottieniNomeGiocatore(g);
   }
 }

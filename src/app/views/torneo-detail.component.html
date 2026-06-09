@@ -1,0 +1,59 @@
+@if (partitaSelezionata) {
+  <app-match-detail
+    [partita]="partitaSelezionata"
+    (salvaPartita)="salvaPartita($event)"
+    (annulla)="partitaSelezionata = null">
+  </app-match-detail>
+}
+@else {
+<div class="detail-container">
+  <h2>{{ isEdit ? 'Modifica Torneo' : 'Nuovo Torneo' }} {{torneo.data}}</h2>
+  
+  <div class="table-header-flex">
+    <h3>Elenco Partite</h3>
+    <button class="btn-add" (click)="aggiungiPartita()">+ Aggiungi Partita</button>
+  </div>
+
+  <table class="mani-table">
+    <thead>
+      <tr>
+        <th>Chi ha vinto</th>
+        <th>Punti Donne</th>
+        <th>Punti Uomini</th>
+        <th>Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (p of torneo.partite; track p.id) {
+        <tr>
+          <td><span><b>{{ nomeSquadra(p.vittoria) }}</b></span></td>
+          <td>{{ p.puntiD }}</td>
+          <td>{{ p.puntiU }}</td>
+          <td>
+            <button class="btn-edit" (click)="modificaPartita(p)">Modifica</button>
+            <button class="btn-delete" (click)="eliminaPartita(p.id)">Elimina</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5" class="no-data">Nessuna partita registrata per questo torneo.</td>
+        </tr>
+      }
+        <tr>
+          <td><span><b>Totale</b></span></td>
+          <td><span><b>{{ torneo.vittorieD }}</b></span>
+                @if (torneo.vittoria === 'D') { <span class="crown">👑</span> }</td>
+          <td><span><b>{{ torneo.vittorieU }}</b></span>
+                @if (torneo.vittoria === 'U') { <span class="crown">👑</span> }</td>
+          <td></td>
+          <td></td>
+        </tr>
+    </tbody>
+  </table>
+
+  <div class="main-actions">
+    <button class="btn-save-all" (click)="salvaTutto()">Salva Tutto e Chiudi</button>
+    <button class="btn-cancel-all" (click)="annulla.emit()">Annulla Modifiche</button>
+  </div>
+</div>
+}

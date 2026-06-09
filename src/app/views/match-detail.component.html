@@ -4,7 +4,7 @@
       <h3>Chi fa le carte in prima mano?</h3>
       <div class="player-grid">
         @for (g of giocatori; track g) {
-          <button class="btn-player" (click)="selezionaGiocatoreIniziale(g)">{{ g }}</button>
+          <button class="btn-player" (click)="selezionaGiocatoreIniziale(g)">{{ nomeGiocatore(g) }}</button>
         }
       </div>
       <button class="btn-cancel-dialog" (click)="annulla.emit()">Annulla e Torna Indietro</button>
@@ -23,7 +23,7 @@
 }
 
 <div class="detail-container" [class.blurred]="mostraDialogIniziale || manoInModifica">
-  <h2>{{ isEdit ? 'Modifica Partita' : 'Nuova Partita' }} {{partita.data}}</h2>
+  <h2>{{ isEdit ? 'Modifica Partita' : 'Nuova Partita' }}</h2>
   
   <div class="table-header-flex">
     <h3>Elenco Mani</h3>
@@ -44,13 +44,18 @@
       @for (m of partita.mani; track m.id; let i = $index) {
         <tr>
           <td>
-            {{ i % 4 === 0 ? partita.giocatorePrimaMano : '' }}
+            {{ i % 4 === 0 ? nomeGiocatore(partita.primaMano) : '' }}
           </td>
-          <td>{{ m.punteggioDonne }}</td>
-          <td>{{ m.punteggioUomini }}</td>
-          <td><span><b>{{ m.giocatoreChiusura }}</b></span>@if (m.chiusuraDiMano) {
+          <td>{{ m.puntiS + m.puntiW }}</td>
+          <td>{{ m.puntiG + m.puntiL }}</td>
+          <td><span><b>{{ nomeGiocatore(m.chiHaChiuso) }}</b></span>
+            @if (m.chiusoDiMano) {
               <span class="mano-icon" title="Chiusura di mano">🖐️</span>
-            }</td>
+            }
+            @if (m.shit) {
+              <span class="mano-icon" title="Merdina">💩</span>
+            }
+          </td>
           <td>
             <button class="btn-edit" (click)="modificaMano(m)">Modifica</button>
             <button class="btn-delete" (click)="eliminaMano(m.id)">Elimina</button>
@@ -63,10 +68,10 @@
       }
         <tr>
           <td><span><b>Totale</b></span></td>
-          <td><span><b>{{ partita.punteggioTotaleDonne }}</b></span>
-                @if (partita.squadraVincente === 'Donne') { <span class="crown">👑</span> }</td>
-          <td><span><b>{{ partita.punteggioTotaleUomini }}</b></span>
-                @if (partita.squadraVincente === 'Uomini') { <span class="crown">👑</span> }</td>
+          <td><span><b>{{ partita.puntiD }}</b></span>
+                @if (partita.vittoria === 'D') { <span class="crown">👑</span> }</td>
+          <td><span><b>{{ partita.puntiU }}</b></span>
+                @if (partita.vittoria === 'U') { <span class="crown">👑</span> }</td>
           <td></td>
           <td></td>
         </tr>
