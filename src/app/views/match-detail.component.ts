@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Partita, Giocatore, Mano } from '../models/types';
-import { ManoDialogComponent } from './mano-dialog.component';
+import { ManoDialog, ManoDialogComponent } from './mano-dialog.component';
 import { ottieniNomeGiocatore } from '../utils/utils';
 @Component({
   selector: 'app-match-detail',
@@ -22,7 +22,7 @@ export class MatchDetailComponent implements OnInit {
   mostraDialogIniziale: boolean = false;
 
   // Stato gestione Dialog Mano
-  manoInModifica: Mano | null = null;
+  manoInModifica: ManoDialog | null = null;
   isNuovaMano: boolean = false;
 
   ngOnInit() {
@@ -41,10 +41,10 @@ export class MatchDetailComponent implements OnInit {
     this.isNuovaMano = true;
     this.manoInModifica = {
       id: Date.now(),
-      puntiG: 0,
-      puntiL: 0,
-      puntiS: 0,
-      puntiW: 0,
+      puntiG: undefined,
+      puntiL: undefined,
+      puntiS: undefined,
+      puntiW: undefined,
       chiHaChiuso: 'G',
       chiusoDiMano: false,
       shit: false,
@@ -63,13 +63,24 @@ export class MatchDetailComponent implements OnInit {
     }
   }
 
-  salvaManoDialog(manoRicevuta: Mano) {
+  salvaManoDialog(manoRicevuta: ManoDialog) {
+
+    const mano: Mano = {
+      id: manoRicevuta.id,
+      puntiG: manoRicevuta.puntiG ?? 0,
+      puntiL: manoRicevuta.puntiL ?? 0,
+      puntiS: manoRicevuta.puntiS ?? 0,
+      puntiW: manoRicevuta.puntiW ?? 0,
+      chiHaChiuso: manoRicevuta.chiHaChiuso,
+      chiusoDiMano: manoRicevuta.chiusoDiMano,
+      shit: manoRicevuta.shit,
+    }
     if (this.isNuovaMano) {
-      this.partita.mani.push(manoRicevuta);
+      this.partita.mani.push(mano);
     } else {
       const index = this.partita.mani.findIndex(m => m.id === manoRicevuta.id);
       if (index !== -1) {
-        this.partita.mani[index] = manoRicevuta;
+        this.partita.mani[index] = mano;
       }
     }
     this.riconteggiaPartita();

@@ -1,8 +1,19 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Mano, Giocatore } from '../models/types';
+import { Giocatore } from '../models/types';
 import { ottieniNomeGiocatore } from '../utils/utils';
+
+export interface ManoDialog {
+  id: number;
+  puntiG: number | undefined;
+  puntiL: number | undefined;
+  puntiS: number | undefined;
+  puntiW: number | undefined;
+  chiHaChiuso: Giocatore;
+  chiusoDiMano: boolean;
+  shit: boolean;
+}
 
 @Component({
   selector: 'app-mano-dialog',
@@ -12,15 +23,15 @@ import { ottieniNomeGiocatore } from '../utils/utils';
   styleUrls: ['./mano-dialog.component.css']
 })
 export class ManoDialogComponent implements OnInit {
-  @Input() mano!: Mano;
+  @Input() mano!: ManoDialog;
   @Input() giocatori: Giocatore[] = [];
   @Input() isNuovaMano: boolean = false;
   
-  @Output() salva = new EventEmitter<Mano>();
+  @Output() salva = new EventEmitter<ManoDialog>();
   @Output() annulla = new EventEmitter<void>();
 
   // Lavoriamo su una copia locale per non sporcare i dati prima del "Conferma"
-  manoLocale!: Mano;
+  manoLocale!: ManoDialog;
 
   ngOnInit() {
     this.manoLocale = { ...this.mano };
